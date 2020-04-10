@@ -38,7 +38,7 @@ let templateReducer = (state, action) => {
         case TESTCASE_DELETE:
             console.log('redcuer delete')
             let filteredArray = state.someArray.filter(item =>{
-                return item.id !=action.id
+                return item.id !==action.id
             })
             console.log('filtered array', filteredArray)
             return{
