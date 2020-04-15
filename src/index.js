@@ -9,6 +9,8 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import App from './App';
 import BaseLayout from './components/layout/BaseLayout';
 import Container from './components/Container';
+import Map from './components/map'
+
 
 let saveToLocalStorage = (state) => {
   try {
@@ -52,8 +54,10 @@ ReactDOM.render(
     <BrowserRouter>
       <BaseLayout>
         <Switch>
+
           <Route exact path="/" component={App} />
           <Route exact path="/container" component={Container} />
+          {/* <Route exact path="/map" component={Map} /> */}
         </Switch>
       </BaseLayout>
     </BrowserRouter>
