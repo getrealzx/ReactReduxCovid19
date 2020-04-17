@@ -1,10 +1,9 @@
 //combines all application reducers
 
 import {combineReducers} from 'redux'
-import template from './templateReducer'
+import dataReducer from './dataReducer';
 
 
 export default combineReducers({
-    template: template
-    
+    dataReducer: dataReducer
 })

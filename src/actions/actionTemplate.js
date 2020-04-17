@@ -1,4 +1,4 @@
-import {TESTCASE1, TESTCASE_ADD, TESTCASE_DELETE} from './actionTypes'
+import {LOADDATA,TESTCASE1,  TESTCASE_ADD, TESTCASE_DELETE} from './actionTypes'
 
 export const testCase1 = (countValue) =>{
     return {
@@ -20,5 +20,12 @@ export const testCaseDelete = (id) =>{
     return {
         type: TESTCASE_DELETE,
         id: id
+    }
+}
+
+export const loadData = (dataObj) =>{
+    return {
+        type: loadData,
+        data: dataObj
     }
 }

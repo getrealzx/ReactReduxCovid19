@@ -2,7 +2,7 @@ import * as Constants from '../constants'
 import data from '../data.json'
 
 const options = [{
-  name: 'Total Cases',
+  name: 'Total Cases/Million Population',
   description: 'Estimated total population',
   property: 'pop_est',
   stops: [
@@ -17,7 +17,23 @@ const options = [{
     [1000000000, '#6e40e6']
   ]
 }, {
-  name: 'New Cases',
+  name: 'TotalDeaths',
+  description: 'Estimate total GDP in millions of dollars',
+  property: 'gdp_md_est',
+  stops: [
+    [0, '#f8d5cc'],
+    [1000, '#f4bfb6'],
+    [5000, '#f1a8a5'],
+    [10000, '#ee8f9a'],
+    [50000, '#ec739b'],
+    [100000, '#dd5ca8'],
+    [250000, '#c44cc0'],
+    [5000000, '#9f43d7'],
+    [10000000, '#6e40e6']
+  ]
+}
+, {
+  name: 'Total Recovery',
   description: 'Estimate total GDP in millions of dollars',
   property: 'gdp_md_est',
   stops: [

@@ -9,7 +9,15 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import App from './App';
 import BaseLayout from './components/layout/BaseLayout';
 import Container from './components/Container';
-import Map from './components/map'
+
+//chart
+import Chart from './components/Chart'
+
+// //map
+// import { setActiveOption } from './redux/action-creators'
+// import Map from './components/Map'
+// import Toggle from './components/Toggle'
+// import Legend from './components/Legend'
 
 
 let saveToLocalStorage = (state) => {
@@ -53,12 +61,16 @@ ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <BaseLayout>
+
         <Switch>
 
           <Route exact path="/" component={App} />
-          <Route exact path="/container" component={Container} />
+          {/* <Route exact path="/" component={Container} /> */}
+          <Route exact path="/chart" component={Chart} />
+
           {/* <Route exact path="/map" component={Map} /> */}
         </Switch>
+
       </BaseLayout>
     </BrowserRouter>
   </Provider>

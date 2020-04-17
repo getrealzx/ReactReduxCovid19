@@ -1,35 +1,30 @@
-// import React, { Component } from 'react'
-
-// class App extends Component {
-//   render() {
-//     return (
-//       <>
-//         Home Page
-//       </>
-//     )
-//   }
-// }
-
-// export default App
-
-
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
+
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './components/styles.css';
+import Table from 'react-bootstrap/Table';
+import { loadCovidData, addCountry } from "./actions/covidActions"
+import SelectedCountries from './components/SelectedCountries'
+// import { addCountry, RemoveCountry } from '../actions/action'
 
+// import $ from 'jquery';
 
-
+// //map
+// import { setActiveOption } from './reducers/action-creators'
+// import Map from './components/Map'
+// import Toggle from './components/Toggle'
+// import Legend from './components/Legend'
 
 
 class App extends Component {
-
-
   constructor(props) {
     super(props)
     this.state = {
       loading: true,
-      data: []
+      selected: []
+
     }
   }
 
@@ -47,77 +42,133 @@ class App extends Component {
   //     })
   // }
 
+  // https://api.covid19api.com/summary
 
   componentDidMount() {
-    axios.get("https://api.covid19api.com/summary")
+    axios.get("summary.json")
       .then(res => {
         const data = res.data;
+        //setting local state
         this.setState({
           data: data,
-          loading: false
+          loading: false,
+          selected: []
+
+        }, () => {
+
+          this.props.loadCovidData(this.state.data.Countries)
+
         });
       })
   }
 
 
+
   render() {
-    console.log(this.state.data);
+
     if (this.state.loading) {
       return <p>Loading Data</p>
-    }
+    };
 
+    console.log("===============app local state===============");
+    console.log(this.state.data.Countries[100].TotalConfirmed);
+    console.log(this.state.data.Countries);
+
+    console.log("==============app props==============");
+    console.log(this.props.data[100].TotalConfirmed);
+    // console.log(this.props.selected[0].Country);
 
 
     return (
       <>
-        {/* <div>
-          <Table striped bordered hover size="sm" variant="dark">
+
+
+        <div>
+          <SelectedCountries />
+
+
+
+          <Table id="scrollTable" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%" striped bordered hover size="sm" variant="dark" >
             <thead>
-              <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-              </tr>
+              <th class="th-sm">Region/Country</th>
+              <th class="th-sm">Total Cases</th>
+              <th class="th-sm">Total Death</th>
+              <th class="th-sm">Total Recovery</th>
             </thead>
+
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td colSpan="2">Larry the Bird</td>
-                <td>@twitter</td>
-              </tr>
+
+              {/* <p>Test Here:{this.state.data.Countries[100].TotalConfirmed}</p>
+              <p>Test Here:{this.props.data[100].TotalConfirmed}</p> */}
+
+              {
+                this.props.data.map((region, index) => {
+                  return <tr key={region.Country}>
+                    <td>{region.Country}</td>
+                    <td>{region.TotalConfirmed}</td>
+                    <td>{region.TotalDeaths}</td>
+                    <td>{region.TotalRecovered}</td>
+                    {/* <td><input type="checkbox" id="vehicle1" name="vehicle1" value="Bike"/></td> */}
+                    <td>
+                      <button
+                        onClick={() => {
+                          this.props.addCountry(
+                            //  this.state.data.Countries
+                            // {
+                            //   "Country": "China",
+                            //   "CountryCode": "CN",
+                            //   "Slug": "china",
+                            //   "NewConfirmed": 50,
+                            //   "TotalConfirmed": 83356,
+                            //   "NewDeaths": 1,
+                            //   "TotalDeaths": 3346,
+                            //   "NewRecovered": 111,
+                            //   "TotalRecovered": 78311,
+                            //   "Date": "2020-04-16T14:09:46Z"
+                            // }
+                            region
+
+                          )
+                        }}
+                      >Add to Compare</button></td>
+                  </tr>
+                })
+              }
             </tbody>
           </Table>
-        </div> */}
-        <div className="main">
-        <ul>
-          <li>Global Confrimed</li>
-          <li>{this.state.data.Global.TotalConfirmed}</li>
-          {/* <li>{this.state.data.Countries[1].Country}</li> */}
-
-          {this.state.data.Countries.map((region, index) => {
-            return <li key={region.Country}>{region.Country}:  || Total Cases: {region.TotalConfirmed} || Total Deaths: {region.TotalDeaths}  || Total Recovered: {region.TotalRecovered}</li>
-          })}
-        </ul>
-
         </div>
-
-
       </>
     )
   }
 }
 
-export default App
+
+//get data from redux
+let mapStateToProps = (state) => {
+
+  console.log("print mapStateToProp");
+  console.log(state.dataReducer.data[1]);
+
+  //this.state.dataReducer.data
+
+
+  return {
+    data: state.dataReducer.data
+  }
+}
+
+//passing data to redux
+//this.props.loadCovidData
+let mapDispatchToProps = (dispatch) => {
+
+  return {
+    loadCovidData: (InitialCovidData) => dispatch(loadCovidData(InitialCovidData)),
+    addCountry: (selectedCountry) => dispatch(addCountry(selectedCountry))
+
+
+  }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
+
