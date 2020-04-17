@@ -7,6 +7,8 @@ import './components/styles.css';
 import Table from 'react-bootstrap/Table';
 import { loadCovidData, addCountry } from "./actions/covidActions"
 import SelectedCountries from './components/SelectedCountries'
+import PropTypes from "prop-types";
+
 // import { addCountry, RemoveCountry } from '../actions/action'
 
 // import $ from 'jquery';
@@ -44,23 +46,44 @@ class App extends Component {
 
   // https://api.covid19api.com/summary
 
-  componentDidMount() {
-    axios.get("summary.json")
-      .then(res => {
-        const data = res.data;
-        //setting local state
-        this.setState({
-          data: data,
-          loading: false,
-          selected: []
+  // componentDidMount() {
+  //   axios.get("summary.json")
+  //     .then(res => {
+  //       const data = res.data;
+  //       //setting local state
+  //       this.setState({
+  //         data: data,
+  //         loading: false,
+  //         selected: []
 
-        }, () => {
+  //       }, () => {
 
-          this.props.loadCovidData(this.state.data.Countries)
+  //         this.props.loadCovidData(this.state.data.Countries)
 
-        });
-      })
+  //       });
+  //     })
+  // }
+
+
+  /* 
+  
+
+  - udpate covidActions to include axios request
+  - create your box (dispatch) with the address (action type) contents of package (payload)
+  - setup componentWillMount() to initialize function
+  - declare loadCovidData in "Customs declaration form" (propTypes)
+  - test/debug using Redux Devtools to confirm if action types are being dispatched
+
+  componentWillMount() {
+    this.props.loadCovidData()
   }
+  
+  */
+
+ componentWillMount() {
+  this.props.loadCovidData()
+}
+
 
 
 
@@ -70,13 +93,17 @@ class App extends Component {
       return <p>Loading Data</p>
     };
 
-    console.log("===============app local state===============");
-    console.log(this.state.data.Countries[100].TotalConfirmed);
-    console.log(this.state.data.Countries);
+    // console.log("looking for data in state from app.js")
+    // console.log(this.state.data)
+
+    // console.log("===============app local state===============");
+    // console.log(this.state.data.Countries[100].TotalConfirmed);
+    // console.log(this.state.data.Countries);
 
     console.log("==============app props==============");
+    console.log(this.props)
     console.log(this.props.data[100].TotalConfirmed);
-    // console.log(this.props.selected[0].Country);
+    console.log(this.props.selected[0].Country);
 
 
     return (
@@ -143,17 +170,38 @@ class App extends Component {
 }
 
 
+App.propTypes = {
+  data: PropTypes.object.isRequired,
+// declare what kind of thing loadCovidData is
+  loadCovidData: PropTypes.func.isRequired
+};
+
 //get data from redux
 let mapStateToProps = (state) => {
 
   console.log("print mapStateToProp");
-  console.log(state.dataReducer.data[1]);
+  // console.log(state.dataReducer.data[1]);
 
-  //this.state.dataReducer.data
+  //this.state.dataReducer.selected
+
+  /*
+  this.state.dataReducer
+  this: {
+    state: {
+      dataReducer: {
+        selected: {
+
+        }
+      }
+    }
+  }
+
+  */
+
 
 
   return {
-    data: state.dataReducer.data
+    data: state.dataReducer.selected
   }
 }
 
@@ -162,7 +210,7 @@ let mapStateToProps = (state) => {
 let mapDispatchToProps = (dispatch) => {
 
   return {
-    loadCovidData: (InitialCovidData) => dispatch(loadCovidData(InitialCovidData)),
+    // loadCovidData: (InitialCovidData) => dispatch(loadCovidData(InitialCovidData)),
     addCountry: (selectedCountry) => dispatch(addCountry(selectedCountry))
 
 
@@ -170,5 +218,6 @@ let mapDispatchToProps = (dispatch) => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps,{loadCovidData})(App)
 
+// connect(mapStateToProps, {loadCovidData})(App)

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { deleteCountry } from "../actions/covidActions"
 
 //import {newActionCreatorFunction} from "someactioncreator"
+// import Chart from './Chart'
 
 
 
@@ -20,8 +21,7 @@ class SelectedCountries extends Component {
         return (
             <>
                 {/* {this.props.selected[0].Country} */}
-                {/* <Chart /> */}
-
+                {/* <div><Chart /></div> */}
 
                 <div className="main">
                     <table>
